@@ -1,4 +1,4 @@
-from runTest import get_result
+from run import get_result
 
 # 입력 이미지는 정사각형
 # 정규 규격은 28*28이나 자동으로 변환하므로 더 커도 상관 없음 (예시 이미지는 128 * 128)
