@@ -12,14 +12,16 @@ import sys
 import os
 import os.path
 
-# 입력 이미지는 정사각형
-# 정규 규격은 28*28이나 자동으로 변환하므로 더 커도 상관 없음
-# 굵은 펜으로 해야함
-
-# Shell에서 "python runTest.py [image_path] ./model/trained_model ./model/dump"
-# 또는 function 호출로 "main_module('image path', './model/trained_model.h5', './model/dump')"
-
-def main_module(image_path, path1, path2):
+def get_result(image_path: str, path1: str, path2: str) -> list:
+    if not os.path.isfile(image_path):
+        print('\n"' + image_path + '"' + '은 존재하지 않거나 올바르지 않은 경로입니다.')
+    elif not os.path.isfile(path1):
+        print('\n"' + path1 + '"' + '은 존재하지 않거나 올바르지 않은 경로입니다.')
+    elif path1.find('.h5') == -1:
+        print('\n"' + path1 + '"' + '은 h5 파일이 아닙니다.')
+    elif not os.path.isfile(path2):
+        print('\n"' + path2 + '"' + '은 존재하지 않거나 올바르지 않은 경로입니다.')
+    
     model = keras.models.load_model(path1)
 
     image = Image.open(image_path).convert('L')
@@ -39,14 +41,17 @@ def main_module(image_path, path1, path2):
     plt.grid(False)
     plt.show()
 
-    with open (path2) as fp:
+    with open(path2, 'rb') as fp:
         dataset_name = pickle.load(fp)
 
     predictions = model.predict(result)
     result_dict = dict(zip(dataset_name, predictions[0]))
     result_dict = sorted(result_dict.items(), key=(lambda x:x[1]), reverse=True)
-    for li in result_dict[0:10]:
-        print(li[0] + '.jpg')
+    li = []
+    for ol in result_dict[0:10]:
+        li.append(ol[0] + '.jpg')
+    return li
+    
 
 if len(sys.argv) != 1:
     if len(sys.argv) < 4:
@@ -56,14 +61,4 @@ if len(sys.argv) != 1:
     else:
         if sys.argv[2].find('.') == -1:
             sys.argv[2] = sys.argv[2] + '.h5'
-
-    if not os.path.isfile(sys.argv[1]):
-        print('\n"' + sys.argv[1] + '"' + '은 존재하지 않거나 올바르지 않은 경로입니다.')
-    elif not os.path.isfile(sys.argv[2]):
-        print('\n"' + sys.argv[2] + '"' + '은 존재하지 않거나 올바르지 않은 경로입니다.')
-    elif sys.argv[2].find('.h5') == -1:
-        print('\n"' + sys.argv[2] + '"' + '은 h5 파일이 아닙니다.')
-    elif not os.path.isfile(sys.argv[3]):
-        print('\n"' + sys.argv[3] + '"' + '은 존재하지 않거나 올바르지 않은 경로입니다.')
-    else:
-        main_module(sys.argv[1], sys.argv[2], sys.argv[3])
+            main_module(sys.argv[1], sys.argv[2], sys.argv[3])
