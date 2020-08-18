@@ -7,6 +7,7 @@ from run import get_result
 # Shell에서 "python runTest.py [image_path] ./model/trained_model ./model/dump"
 # 또는 function 호출로 "main_module('image path', './model/trained_model.h5', './model/dump')"
 
-result = get_result('bee.jpg', 'model1-35/model.h5', 'model1-35/dump')
+result = get_result('apple.jpg', 'model1-35/model.h5', 'model1-35/dump')
+
 
 print(result)
