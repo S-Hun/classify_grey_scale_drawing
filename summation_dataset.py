@@ -23,7 +23,7 @@ for name in file_list:
         continue
     length = length + 1
     Lable.append(name.replace('.npy', '').replace('full_numpy_bitmap_', ''))
-    print('### file name # {:30} ### file size # {:12} ###'.format(name, str(ds.shape)))
+    print('#', length ,'### file name # {:30} ### file size # {:12} ###'.format(name, str(ds.shape)))
     sample_list = np.random.choice(len(ds), size = train_size + test_size, replace=False)
     sample = ds[sample_list]
     sample = np.reshape(sample, (sample.shape[0], 28, 28, 1))
@@ -45,9 +45,9 @@ X_test = X_test.astype('float32')
 Y_train = keras.utils.to_categorical(Y_train, length)
 Y_test = keras.utils.to_categorical(Y_test, length)
 
-X_train = X_train / 255.0
-Y_train = Y_train / 255.0
+# X_train = X_train / 255.0
+# X_test = X_test / 255.0
 
 print('Shape', X_train.shape, X_test.shape, Y_train.shape, Y_test.shape, sep='\n')
 
-np.savez('Dataset', X_train = X_train, Y_train = Y_train, X_test = X_test, Y_test = Y_test, classes = Lable)
+np.savez('Dataset_test', X_train = X_train, Y_train = Y_train, X_test = X_test, Y_test = Y_test, classes = Lable)
