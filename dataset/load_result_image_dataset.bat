@@ -1,3 +1,3 @@
 @echo off
-echo Not yet.
+Service is not available
 PAUSE
