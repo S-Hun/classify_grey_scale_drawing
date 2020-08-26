@@ -29,8 +29,6 @@ def get_result(image_path: str, path1: str, path2: str) -> list:
     result_image = ImageOps.invert(result_image)
     image_result = np.array(result_image)
 
-    image_result = image_result / 255
-
     result = image_result
     result = result.reshape(result.shape[1], 28, 1)
     result = np.array([result])
@@ -40,18 +38,18 @@ def get_result(image_path: str, path1: str, path2: str) -> list:
     plt.colorbar()
     plt.grid(False)
     plt.show()
+    print(result)
 
     with open(path2, 'rb') as fp:
         dataset_name = pickle.load(fp)
-
-    predictions = model.predict(result)
-    result_dict = dict(zip(dataset_name, predictions[0]))
+        predictions = model.predict(result)
+        result_dict = dict(zip(dataset_name, predictions[0]))
+        
     result_dict = sorted(result_dict.items(), key=(lambda x:x[1]), reverse=True)
     li = []
     for ol in result_dict[0:10]:
         li.append(ol[0] + '.jpg')
     return li
-    
 
 if len(sys.argv) != 1:
     if len(sys.argv) < 4:
@@ -61,4 +59,4 @@ if len(sys.argv) != 1:
     else:
         if sys.argv[2].find('.') == -1:
             sys.argv[2] = sys.argv[2] + '.h5'
-            main_module(sys.argv[1], sys.argv[2], sys.argv[3])
+            get_result(sys.argv[1], sys.argv[2], sys.argv[3])
